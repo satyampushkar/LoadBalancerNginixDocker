@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  reverseproxy:
+    build:
+      context: ./Nginx
+      dockerfile: Nginx.Dockerfile
+    ports:
+      - "80:80"
+    restart: always
+
+  api:
+    depends_on:
+      - reverseproxy
+    image: ${DOCKER_REGISTRY-}loadbalancernginixdocker
+    build:
+      context: .
+      dockerfile: loadBalancerNginixDocker/Dockerfile
+    expose:
+      - "5000"
+    restart: always
